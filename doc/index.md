@@ -17,7 +17,7 @@
     under the License.
 -->
 
-# org.awoken-well.proximity
+# org.awokenwell.proximity
 
 This plugin provides access to the device's (IR) proximity sensor. This sensor is typically used in applications to prevent touch events on the screen when the device is held close to one's face.
 

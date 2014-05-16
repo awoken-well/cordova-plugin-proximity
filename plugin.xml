@@ -19,15 +19,15 @@
 -->
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-           id="org.awoken-well.proximity"
+           id="org.awokenwell.proximity"
       version="0.1.1">
 	
     <name>Proximity Sensor</name>
     <description>Cordova Proximity Sensor Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,proximity,sensor</keywords>
-    <repo></repo>
-    <issue></issue>
+    <repo>https://github.com/awoken-well/cordova-plugin-proximity.git</repo>
+    <issue>https://github.com/awoken-well/cordova-plugin-proximity/issues</issue>
 
     <js-module src="www/proximity.js" name="proximity">
         <clobbers target="navigator.proximity" />

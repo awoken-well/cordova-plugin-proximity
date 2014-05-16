@@ -17,7 +17,7 @@
          under the License.
 -->
 
-# com.awokenwell.proximity
+# org.awokenwell.proximity
 
 Simple interface to the iOS proximity sensor.
 
