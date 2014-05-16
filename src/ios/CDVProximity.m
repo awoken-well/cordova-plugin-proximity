@@ -31,7 +31,7 @@
     self = [super init];
     if (self) {
         self.callbackId = nil;
-        available = nil;
+        available = NO;
         status = NO;
     }
     return self;
@@ -53,8 +53,9 @@
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {
-    available = [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
-
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    available = [[UIDevice currentDevice] proximityState];
+    
     CDVPluginResult* pluginResult = nil;
     if (available){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:) name:@"UIDeviceProximityStateDidChangeNotification" object:nil];
