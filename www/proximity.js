@@ -32,7 +32,7 @@ var proximity = {
      *  @param successCallback  callback function which delivers the boolean sensor state
      */
     getProximityState: function(successCallback) {
-        argscheck.checkArgs('fFO', 'proximity.getProximityState', arguments);
+        argscheck.checkArgs('F', 'proximity.getProximityState', arguments);
         exec(successCallback, null, "Proximity", "getProximityState", []);
     },
 
@@ -40,7 +40,6 @@ var proximity = {
      *  Enable the proximity sensor. Needs to be called before getting the proximity state.
      */
     enableSensor: function() {
-        argscheck.checkArgs('FF', 'proximity.start', arguments);
         exec(successCallback, errorCallback, "Proximity", "start", []);
     },
 
