@@ -19,7 +19,7 @@
 -->
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-           id="com.awokenwell.proximity"
+           id="org.awoken-well.proximity"
       version="0.1.1">
 	
     <name>Proximity Sensor</name>
