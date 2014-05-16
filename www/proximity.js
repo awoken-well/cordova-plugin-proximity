@@ -28,7 +28,8 @@ var argscheck = require('cordova/argscheck'),
 
 var proximity = {
     /**
-     *
+     *  Get the current proximity sensor state.
+     *  @param successCallback  callback function which delivers the boolean sensor state
      */
     getProximityState: function(successCallback) {
         argscheck.checkArgs('fFO', 'proximity.getProximityState', arguments);
@@ -36,7 +37,7 @@ var proximity = {
     },
 
     /**
-     *
+     *  Enable the proximity sensor. Needs to be called before getting the proximity state.
      */
     enableSensor: function() {
         argscheck.checkArgs('FF', 'proximity.start', arguments);
@@ -44,7 +45,7 @@ var proximity = {
     },
 
     /**
-     *
+     *  Disable the proximity sensor.
      */
     disableSensor: function() {
         exec(null, null, "Proximity", "stop", []);
