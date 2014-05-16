@@ -50,10 +50,9 @@ be enabled manually.
 
     navigator.proximity.enableSensor();
 
-## navigator.proximity.disableSensor();
+## navigator.proximity.disableSensor
 
-Enable the proximity sensor. In iOS the proximity sensor is disabled by default and must
-be enabled manually.
+Disable the proximity sensor.
 
     navigator.proximity.enableSensor();
 
