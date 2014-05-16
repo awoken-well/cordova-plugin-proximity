@@ -30,7 +30,7 @@
 
 - (CDVProximity*)init;
 
-- (void)getProximityStatus:(CDVInvokedUrlCommand*)command;
+- (void)getProximityState:(CDVInvokedUrlCommand*)command;
 - (void)start:(CDVInvokedUrlCommand*)command;
 - (void)stop:(CDVInvokedUrlCommand*)command;
 
