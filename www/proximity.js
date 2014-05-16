@@ -39,19 +39,15 @@ var proximity = {
     /**
      *
      */
-    enableSensor: function(successCallback, errorCallback) {
-        try {
-            argscheck.checkArgs('FF', 'proximity.start', arguments);
-            exec(successCallback, errorCallback, "Proximity", "start", []);
-        } catch (err) {
-            alert("error: "+ err);
-        }
+    enableSensor: function() {
+        argscheck.checkArgs('FF', 'proximity.start', arguments);
+        exec(successCallback, errorCallback, "Proximity", "start", []);
     },
 
     /**
      *
      */
-    disableSensor: function(id) {
+    disableSensor: function() {
         exec(null, null, "Proximity", "stop", []);
     }
 };
