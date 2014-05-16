@@ -31,8 +31,8 @@
     self = [super init];
     if (self) {
         self.callbackId = nil;
-        self.available = nil;
-        self.status = NO;
+        available = nil;
+        status = NO;
     }
     return self;
 }
@@ -53,10 +53,10 @@
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {
-    self.available = [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    available = [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
 
     CDVPluginResult* pluginResult = nil;
-    if (self.available){
+    if (available){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:) name:@"UIDeviceProximityStateDidChangeNotification" object:nil];
         
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -78,7 +78,7 @@
 
 - (void)sensorStateChange:(NSNotificationCenter *)notification
 {
-    self.status = [[UIDevice currentDevice] proximityState];
+    status = [[UIDevice currentDevice] proximityState];
 }
 
 @end
