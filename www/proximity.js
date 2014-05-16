@@ -40,7 +40,7 @@ var proximity = {
      *  Enable the proximity sensor. Needs to be called before getting the proximity state.
      */
     enableSensor: function() {
-        exec(successCallback, errorCallback, "Proximity", "start", []);
+        exec(null, null, "Proximity", "start", []);
     },
 
     /**
