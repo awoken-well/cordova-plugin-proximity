@@ -25,7 +25,7 @@
  */
 var argscheck = require('cordova/argscheck'),
     utils = require("cordova/utils"),
-    exec = require("cordova/exec"),
+    exec = require("cordova/exec");
 
 var proximity = {
     /**
@@ -40,8 +40,12 @@ var proximity = {
      *
      */
     enableSensor: function(successCallback, errorCallback) {
-        argscheck.checkArgs('fFO', 'proximity.start', arguments);
-        exec(successCallback,errorCallback, "Proximity", "start", []);
+        try {
+            argscheck.checkArgs('FF', 'proximity.start', arguments);
+            exec(successCallback, errorCallback, "Proximity", "start", []);
+        } catch (err) {
+            alert("error: "+ err);
+        }
     },
 
     /**

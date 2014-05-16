@@ -24,13 +24,15 @@
 
 @implementation CDVProximity
 
-@synthesize callbackId, status;
+@synthesize callbackId;
 
 - (CDVProximity*)init
 {
     self = [super init];
     if (self) {
         self.callbackId = nil;
+        self.available = nil;
+        self.status = NO;
     }
     return self;
 }
@@ -51,17 +53,17 @@
 
 - (void)start:(CDVInvokedUrlCommand*)command
 {
-    BOOL proximityAvailable = [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    self.available = [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
 
     CDVPluginResult* pluginResult = nil;
-    if (proximityAvailable){
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:)
-                                                     name:@"UIDeviceProximityStateDidChangeNotification" object:nil];
+    if (self.available){
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:) name:@"UIDeviceProximityStateDidChangeNotification" object:nil];
         
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
     }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void)onReset
@@ -76,7 +78,7 @@
 
 - (void)sensorStateChange:(NSNotificationCenter *)notification
 {
-    self.status = [UIDevice currentDevice] proximityState]
+    self.status = [[UIDevice currentDevice] proximityState];
 }
 
 @end

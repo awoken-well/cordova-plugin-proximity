@@ -22,10 +22,11 @@
 
 @interface CDVProximity : CDVPlugin
 {
+    BOOL status;
+    BOOL available;
 }
 
 @property (nonatomic, strong) NSString* callbackId;
-@property (nonatomic, strong) BOOL status;
 
 - (CDVProximity*)init;
 

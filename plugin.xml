@@ -22,7 +22,7 @@
            id="com.awokenwell.proximity"
       version="0.1.0">
 	
-    <name>Proximity Sensor</name>
+    <name>Proximity</name>
     <description>Cordova Proximity Sensor Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,proximity,sensor</keywords>
