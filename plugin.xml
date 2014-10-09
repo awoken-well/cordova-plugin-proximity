@@ -46,5 +46,17 @@
         <source-file src="src/ios/CDVProximity.m" />
         
     </platform>
+	
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+	        <feature name="Proximity">
+	            <param name="android-package" value="org.awokenwell.proximity.ProximitySensorListener"/>
+	        </feature>
+	    </config-file>
+
+	    <source-file src="src/android/ProximitySensorListener.java" target-dir="src/org/awokenwell/proximity" />
+    </platform> 
+	
 
 </plugin>
