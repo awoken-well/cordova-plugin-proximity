@@ -51,9 +51,9 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
     public static int RUNNING = 2;
     public static int ERROR_FAILED_TO_START = 3;
 	
-	// sensor result 
-	public static int NEAR = 0;
-	public static int FAR = 1;
+    // sensor result 
+    public static int NEAR = 0;
+    public static int FAR = 1;
 
     public long TIMEOUT = 30000;        // Timeout in msec to shut off listener
 
@@ -104,10 +104,6 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
         else if (action.equals("stop")) {
             this.stop();
         }
-        // else if (action.equals("getStatus")) {
-            // int i = this.getStatus();
-            // callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, i));
-        // }
         else if (action.equals("getProximityState")) {
             // If not running, then this is an async call, so don't worry about waiting
             if (this.status != ProximitySensorListener.RUNNING) {
@@ -125,13 +121,6 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
                 }, 2000);
             }
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, getProximity()));
-        //}
-        // else if (action.equals("setTimeout")) {
-            // this.setTimeout(args.getLong(0));
-        // }
-        // else if (action.equals("getTimeout")) {
-            // long l = this.getTimeout();
-            // callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, l));
         } else {
             // Unsupported action
             return false;
@@ -222,13 +211,13 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
      */
     public void onSensorChanged(SensorEvent event) {
 
-		int proximity; 
-		
-		if (event.values[0] == 0) {
-			proximity = ProximitySensorListener.NEAR;
-		}  else {
-			proximity = ProximitySensorListener.FAR;
-		}
+        int proximity; 
+        
+        if (event.values[0] == 0) {
+            proximity = ProximitySensorListener.NEAR;
+        } else {
+            proximity = ProximitySensorListener.FAR;
+        }
 
         // Save lumen
         this.timeStamp = System.currentTimeMillis();
