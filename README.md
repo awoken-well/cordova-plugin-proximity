@@ -72,6 +72,9 @@ Disable the proximity sensor.
 
 ### Example2
 
+This example shows a watcher. If other things approaches the phone, 'on_approch_callback' would be called. 
+
+
     var proximitysensor = {
     };
 
@@ -87,7 +90,6 @@ Disable the proximity sensor.
             navigator.proximity.getProximityState(function(val) { // on success
                 var timestamp = new Date().getTime();
                 if(timestamp - _scope.lastemittedtimestamp > 1000) { // test on each 1 secs
-
                     if( proximitysensor.lastval == 1 && val == 0 ) { // far => near changed
                         _scope.lastemittedtimestamp = timestamp;
                         _scope.lastval = val;
