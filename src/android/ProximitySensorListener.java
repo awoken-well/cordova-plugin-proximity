@@ -42,7 +42,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 /**
- * This class listens to the compass sensor and stores the latest lumen value.
+ * This class listens to the proximity sensor and stores the latest value. 
  */
 public class ProximitySensorListener extends CordovaPlugin implements SensorEventListener {
 
@@ -52,13 +52,13 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
     public static int ERROR_FAILED_TO_START = 3;
 	
     // sensor result 
-    public static int NEAR = 0;
-    public static int FAR = 1;
+    public static int NEAR = 1;
+    public static int FAR = 0;
 
     public long TIMEOUT = 30000;        // Timeout in msec to shut off listener
 
     int status;                         // status of listener
-    int proximity;                        // most recent lumen value
+    int proximity;                        // most recent proximity value
     long timeStamp;                     // time of most recent value
     long lastAccessTime;                // time the value was last retrieved
 
@@ -219,19 +219,19 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
             proximity = ProximitySensorListener.FAR;
         }
 
-        // Save lumen
+        // Save proximity
         this.timeStamp = System.currentTimeMillis();
         this.proximity = proximity;
         this.setStatus(ProximitySensorListener.RUNNING);
 
-        // If lumen hasn't been read for TIMEOUT time, then turn off compass sensor to save power
+        // If proximity hasn't been read for TIMEOUT time, then turn off sensor to save power 
         if ((this.timeStamp - this.lastAccessTime) > this.TIMEOUT) {
             this.stop();
         }
     }
 
     /**
-     * Get status of compass sensor.
+     * Get status of sensor.
      *
      * @return          status
      */
@@ -240,7 +240,7 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
     }
 
     /**
-     * Get the most recent compass distance. 
+     * Get the most recent distance. 
      *
      * @return          distance 
      */
@@ -250,7 +250,7 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
     }
 
     /**
-     * Set the timeout to turn off compass sensor if getlumen() hasn't been called.
+     * Set the timeout to turn off sensor if getProximity() hasn't been called.
      *
      * @param timeout       Timeout in msec.
      */
@@ -259,7 +259,7 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
     }
 
     /**
-     * Get the timeout to turn off compass sensor if getlumen() hasn't been called.
+     * Get the timeout to turn off sensor if getProximity() hasn't been called.
      *
      * @return timeout in msec
      */

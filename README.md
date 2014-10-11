@@ -28,6 +28,7 @@ This plugin provides access to the device's (IR) proximity sensor. This sensor i
 ## Supported Platforms
 
 - iOS
+- Android
 
 ## Methods
 
@@ -54,7 +55,7 @@ be enabled manually.
 
 Disable the proximity sensor.
 
-    navigator.proximity.enableSensor();
+    navigator.proximity.disableSensor();
 
 ### Example
 
@@ -67,6 +68,55 @@ Disable the proximity sensor.
     setInterval(function(){
       navigator.getProximityState(onSuccess);
     }, 1000);
+
+
+### Example2
+
+This example shows a watcher. If other things approaches the phone, 'on_approch_callback' would be called. 
+
+
+    var proximitysensor = {
+    };
+
+    var proximitysensorWatchStart = function(_scope, on_approch_callback) {
+        if(navigator.proximity == null)
+            console.log("cannot find navigator.proximity");
+
+        navigator.proximity.enableSensor();
+
+        // Start watch timer to get proximity sensor value
+        var frequency = 100;
+        _scope.id = window.setInterval(function() {
+            navigator.proximity.getProximityState(function(val) { // on success
+                var timestamp = new Date().getTime();
+                if(timestamp - _scope.lastemittedtimestamp > 1000) { // test on each 1 secs
+                    if( proximitysensor.lastval == 1 && val == 0 ) { // far => near changed
+                        _scope.lastemittedtimestamp = timestamp;
+                        _scope.lastval = val;
+                        on_approch_callback(timestamp);
+                    }
+                }
+                _scope.lastval = val;
+            });
+        }, frequency);
+    }
+
+    var proximitysensorWatchStop = function(_scope) {
+        if(navigator.proximity == null)
+            console.log("cannot find navigator.proximity");
+
+        window.clearInterval( _scope.id );
+
+        navigator.proximity.disableSensor();
+    };
+
+    proximitysensorWatchStart(proximitysensor, function(timestamp) {
+       console.log('approched on ' + timestamp);
+    });
+
+    // .... after testing
+    //proximitysensorWatchStop(proximitysensor);
+
 
 ### iOS Quirks
 

@@ -19,6 +19,8 @@
 #
 -->
 # Release Notes
+### 0.2.0 (Oct 11, 2014)
+* Added proximity sensor API for Android
 
 ### 0.1.1 (May 16, 2014)
 * Simplified API
