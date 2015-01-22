@@ -57,20 +57,20 @@ Disable the proximity sensor.
 
     navigator.proximity.disableSensor();
 
-### Example
+### Example 1
 
     function onSuccess(state) {
-        alert('Proximity state: ' + state? 'near' : 'far');
+        alert('Proximity state: ' + (state ? 'near' : 'far'));
     };
 
     navigator.proximity.enableSensor();
     
     setInterval(function(){
-      navigator.getProximityState(onSuccess);
+      navigator.proximity.getProximityState(onSuccess);
     }, 1000);
 
 
-### Example2
+### Example 2
 
 This example shows a watcher. If other things approaches the phone, 'on_approch_callback' would be called. 
 
