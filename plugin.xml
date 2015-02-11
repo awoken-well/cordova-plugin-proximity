@@ -20,7 +20,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
            id="org.awokenwell.proximity"
-      version="0.1.1">
+      version="0.2.1">
 	
     <name>Proximity Sensor</name>
     <description>Cordova Proximity Sensor Plugin</description>

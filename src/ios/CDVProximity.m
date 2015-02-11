@@ -63,6 +63,7 @@
 - (void)stop:(CDVInvokedUrlCommand*)command
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 - (void)sensorStateChange:(NSNotificationCenter *)notification

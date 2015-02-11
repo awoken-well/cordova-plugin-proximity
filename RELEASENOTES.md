@@ -19,6 +19,9 @@
 #
 -->
 # Release Notes
+### 0.2.1 (Feb 11, 2015)
+* Properly turn off proximity sensor for iOS
+
 ### 0.2.0 (Oct 11, 2014)
 * Added proximity sensor API for Android
 
