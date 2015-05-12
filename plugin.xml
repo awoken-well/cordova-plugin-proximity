@@ -55,6 +55,11 @@
 	        </feature>
 	    </config-file>
 
+      <config-file target="AndroidManifest.xml" parent="/*">
+        <uses-permission android:name="android.permission.WAKE_LOCK" />
+        <uses-permission android:name="android.permission.DEVICE_POWER" />
+      </config-file>
+
 	    <source-file src="src/android/ProximitySensorListener.java" target-dir="src/org/awokenwell/proximity" />
     </platform> 
 	

@@ -21,6 +21,8 @@
 
 package org.awokenwell.proximity;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.cordova.CordovaWebView;
@@ -40,6 +42,9 @@ import android.content.Context;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
+
+import android.view.WindowManager.LayoutParams;
 
 /**
  * This class listens to the proximity sensor and stores the latest value. 
@@ -55,8 +60,6 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
     public static int NEAR = 1;
     public static int FAR = 0;
 
-    public long TIMEOUT = 30000;        // Timeout in msec to shut off listener
-
     int status;                         // status of listener
     int proximity;                        // most recent proximity value
     long timeStamp;                     // time of most recent value
@@ -64,6 +67,11 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
 
     private SensorManager sensorManager;// Sensor manager
     Sensor mSensor;                     // Compass sensor returned by sensor manager
+
+    private PowerManager.WakeLock pmWakeLock;
+    private PowerManager.WakeLock partialWakeLock;
+
+    private LayoutParams defaultLayoutParams = null;
 
     private CallbackContext callbackContext;
 
@@ -83,9 +91,35 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
      * @param cordova The context of the main Activity.
      * @param webView The CordovaWebView Cordova is running in.
      */
+    @SuppressWarnings("deprecation")
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         this.sensorManager = (SensorManager) cordova.getActivity().getSystemService(Context.SENSOR_SERVICE);
+
+        try {
+            PowerManager pm = (PowerManager) cordova.getActivity().getSystemService(Context.POWER_SERVICE);
+            boolean supportProximity = false;
+            Field f = PowerManager.class.getDeclaredField("PROXIMITY_SCREEN_OFF_WAKE_LOCK");
+            int proximityScreenOffWakeLock = (Integer) f.get(null);
+
+            if (android.os.Build.VERSION.SDK_INT >= 17) {
+                Method method = pm.getClass().getDeclaredMethod("isWakeLockLevelSupported", int.class);
+                supportProximity = (Boolean) method.invoke(pm, proximityScreenOffWakeLock);
+            } else {
+                Method method = pm.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
+                int supportedFlags = (Integer) method.invoke(pm);
+                supportProximity = ((supportedFlags & proximityScreenOffWakeLock) != 0x0);
+            }
+
+            if (supportProximity) {
+                this.pmWakeLock = pm.newWakeLock(proximityScreenOffWakeLock, "org.awokenwell.proximity");
+                this.pmWakeLock.setReferenceCounted(false);
+            }
+
+            this.partialWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "org.awokenwell.proximity");
+        } catch (Exception e) {
+            System.out.println("Impossible to get power manager supported wake lock flags");
+        }
     }
 
     /**
@@ -103,24 +137,6 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
         }
         else if (action.equals("stop")) {
             this.stop();
-        }
-        else if (action.equals("getProximityState")) {
-            // If not running, then this is an async call, so don't worry about waiting
-            if (this.status != ProximitySensorListener.RUNNING) {
-                int r = this.start();
-                if (r == ProximitySensorListener.ERROR_FAILED_TO_START) {
-                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.IO_EXCEPTION, ProximitySensorListener.ERROR_FAILED_TO_START));
-                    return true;
-                }
-                // Set a timeout callback on the main thread.
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        ProximitySensorListener.this.timeout();
-                    }
-                }, 2000);
-            }
-            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, getProximity()));
         } else {
             // Unsupported action
             return false;
@@ -162,6 +178,10 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
         @SuppressWarnings("deprecation")
         List<Sensor> list = this.sensorManager.getSensorList(Sensor.TYPE_PROXIMITY);
 
+        if (this.pmWakeLock != null && !this.pmWakeLock.isHeld()) {
+            this.pmWakeLock.acquire();
+        }
+
         // If found, then register as listener
         if (list != null && list.size() > 0) {
             this.mSensor = list.get(0);
@@ -185,23 +205,14 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
         if (this.status != ProximitySensorListener.STOPPED) {
             this.sensorManager.unregisterListener(this);
         }
+        if (this.pmWakeLock != null && this.pmWakeLock.isHeld()) {
+            this.pmWakeLock.release();
+        }
         this.setStatus(ProximitySensorListener.STOPPED);
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
-    }
-
-    /**
-     * Called after a delay to time out if the listener has not attached fast enough.
-     */
-    private void timeout() {
-        if (this.status == ProximitySensorListener.STARTING) {
-            this.setStatus(ProximitySensorListener.ERROR_FAILED_TO_START);
-            if (this.callbackContext != null) {
-                this.callbackContext.error("Compass listener failed to start.");
-            }
-        }
     }
 
     /**
@@ -215,19 +226,22 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
         
         if (event.values[0] == 0) {
             proximity = ProximitySensorListener.NEAR;
+            
+            if (this.partialWakeLock != null && !this.partialWakeLock.isHeld()) {
+                this.partialWakeLock.acquire();
+            }
         } else {
             proximity = ProximitySensorListener.FAR;
+
+            if (this.partialWakeLock != null && this.partialWakeLock.isHeld()) {
+                this.partialWakeLock.release();
+            }
         }
 
         // Save proximity
         this.timeStamp = System.currentTimeMillis();
         this.proximity = proximity;
         this.setStatus(ProximitySensorListener.RUNNING);
-
-        // If proximity hasn't been read for TIMEOUT time, then turn off sensor to save power 
-        if ((this.timeStamp - this.lastAccessTime) > this.TIMEOUT) {
-            this.stop();
-        }
     }
 
     /**
@@ -247,24 +261,6 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
     public int getProximity() {
         this.lastAccessTime = System.currentTimeMillis();
         return this.proximity;
-    }
-
-    /**
-     * Set the timeout to turn off sensor if getProximity() hasn't been called.
-     *
-     * @param timeout       Timeout in msec.
-     */
-    public void setTimeout(long timeout) {
-        this.TIMEOUT = timeout;
-    }
-
-    /**
-     * Get the timeout to turn off sensor if getProximity() hasn't been called.
-     *
-     * @return timeout in msec
-     */
-    public long getTimeout() {
-        return this.TIMEOUT;
     }
 
     /**
