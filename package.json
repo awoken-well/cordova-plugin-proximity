@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-proximity",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "This plugin provides access to the device's (IR) proximity sensor. This sensor is typically used in applications to prevent touch events on the screen when the device is held close to one's face.",
   "main": "www/proximity.js",
   "directories": {
