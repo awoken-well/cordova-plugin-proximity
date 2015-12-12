@@ -1,0 +1,29 @@
+{
+  "name": "cordova-plugin-proximity",
+  "version": "1.0.0",
+  "description": "This plugin provides access to the device's (IR) proximity sensor. This sensor is typically used in applications to prevent touch events on the screen when the device is held close to one's face.",
+  "main": "",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awoken-well/cordova-plugin-proximity.git"
+  },
+  "keywords": [
+    "cordova",
+    "proximity",
+    "plugin",
+    "android",
+    "ios"
+  ],
+  "author": "Olaf T.A. Janssen <o.t.a.janssen@gmail.com> (http://nullelement.org/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/awoken-well/cordova-plugin-proximity/issues"
+  },
+  "homepage": "https://github.com/awoken-well/cordova-plugin-proximity#readme"
+}
