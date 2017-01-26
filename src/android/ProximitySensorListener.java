@@ -55,7 +55,7 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
     public static int STARTING = 1;
     public static int RUNNING = 2;
     public static int ERROR_FAILED_TO_START = 3;
-	
+    
     // sensor result 
     public static int NEAR = 1;
     public static int FAR = 0;
@@ -126,9 +126,9 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
      * Executes the request and returns PluginResult.
      *
      * @param action                The action to execute.
-     * @param args          	    JSONArry of arguments for the plugin.
+     * @param args                  JSONArry of arguments for the plugin.
      * @param callbackS=Context     The callback id used when calling back into JavaScript.
-     * @return              	    True if the action was valid.
+     * @return                      True if the action was valid.
      * @throws JSONException 
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -137,7 +137,13 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
         }
         else if (action.equals("stop")) {
             this.stop();
-        } else {
+        }
+        else if (action.equals("getProximityState")) {
+            int responseValue = this.proximity;
+            callbackContext.success(responseValue);
+            return true;
+        }
+        else {
             // Unsupported action
             return false;
         }
@@ -242,6 +248,7 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
         this.timeStamp = System.currentTimeMillis();
         this.proximity = proximity;
         this.setStatus(ProximitySensorListener.RUNNING);
+
     }
 
     /**
@@ -249,7 +256,7 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
      *
      * @return          status
      */
-    public int getStatus() {
+    public int getProximityState() {
         return this.status;
     }
 
@@ -270,6 +277,6 @@ public class ProximitySensorListener extends CordovaPlugin implements SensorEven
     private void setStatus(int status) {
         this.status = status;
     }
-	
+    
 }
 
